@@ -1,4 +1,7 @@
 ## 1.0.2
+- Added Example
+
+## 1.0.1
 - Added comprehensive example demonstrating all supported use cases
 - Added examples for:
   - Normal web image loading
@@ -9,7 +12,7 @@
 - Improved documentation around caching behavior and background images
 - Clarified differences between AdaptiveImage widget and AdaptiveImageProvider
 
-## 1.0.1
+## 1.0.0
 - Initial release
 - Load images from:
   - Normal public image URLs
