@@ -10,17 +10,12 @@ class AdaptiveImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit? fit;
-  final bool gaplessPlayback;
-  final bool isAntiAlias;
-  final FilterQuality filterQuality;
-  final bool excludeFromSemantics;
-  final String? semanticLabel;
 
-  /// 🔹 Cached image callbacks (for CachedNetworkImage)
+  /// Cached image callbacks
   final Widget Function(BuildContext, String)? cachedPlaceholder;
   final Widget Function(BuildContext, String, dynamic)? cachedErrorWidget;
 
-  /// 🔹 Normal image callback (for Image.network)
+  /// Normal image callback
   final ImageErrorWidgetBuilder? imageErrorBuilder;
 
   const AdaptiveImage._({
@@ -32,17 +27,12 @@ class AdaptiveImage extends StatelessWidget {
     this.width,
     this.height,
     this.fit,
-    this.gaplessPlayback = false,
-    this.isAntiAlias = false,
-    this.filterQuality = FilterQuality.low,
-    this.excludeFromSemantics = false,
-    this.semanticLabel,
     this.cachedPlaceholder,
     this.cachedErrorWidget,
     this.imageErrorBuilder,
   });
 
-  /// Normal public image (non-cached by default)
+  /// Normal public image (no cache)
   static Widget image(
     String url, {
     Key? key,
@@ -64,7 +54,7 @@ class AdaptiveImage extends StatelessWidget {
     );
   }
 
-  /// Google Drive image — uses caching by default
+  /// Google Drive image (cached by default)
   static Widget driveImage(
     String url, {
     Key? key,
@@ -89,7 +79,7 @@ class AdaptiveImage extends StatelessWidget {
     );
   }
 
-  /// Dropbox image — uses caching by default
+  /// Dropbox image (cached by default)
   static Widget dropboxImage(
     String url, {
     Key? key,
@@ -117,6 +107,7 @@ class AdaptiveImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String resolvedUrl = url;
+
     if (isDrive) {
       resolvedUrl = _convertDriveLink(url);
     } else if (isDropbox) {
@@ -131,10 +122,9 @@ class AdaptiveImage extends StatelessWidget {
         fit: fit ?? BoxFit.cover,
         placeholder:
             cachedPlaceholder ??
-            (_, __) => const Center(child: CircularProgressIndicator()),
+            (context, _) => const Center(child: CircularProgressIndicator()),
         errorWidget:
-            cachedErrorWidget ??
-            (_, error, stackTrace) => const Icon(Icons.error),
+            cachedErrorWidget ?? (context, _, error) => const Icon(Icons.error),
       );
     }
 
@@ -143,14 +133,9 @@ class AdaptiveImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-      gaplessPlayback: gaplessPlayback,
-      isAntiAlias: isAntiAlias,
-      filterQuality: filterQuality,
-      excludeFromSemantics: excludeFromSemantics,
-      semanticLabel: semanticLabel,
       errorBuilder:
           imageErrorBuilder ??
-          (_, error, stackTrace) => const Icon(Icons.error),
+          (context, error, stackTrace) => const Icon(Icons.error),
     );
   }
 
@@ -165,22 +150,15 @@ class AdaptiveImage extends StatelessWidget {
   }
 
   String _convertDropboxLink(String url) {
-    // If already direct, return as-is
     if (url.contains('?dl=1') || url.contains('&dl=1')) {
       return url;
     }
-    // Replace dl=0 with dl=1
     if (url.contains('?dl=0')) {
       return url.replaceFirst('?dl=0', '?dl=1');
     }
     if (url.contains('&dl=0')) {
       return url.replaceFirst('&dl=0', '&dl=1');
     }
-    // Append dl=1
-    if (url.contains('?')) {
-      return '$url&dl=1';
-    } else {
-      return '$url?dl=1';
-    }
+    return url.contains('?') ? '$url&dl=1' : '$url?dl=1';
   }
 }
