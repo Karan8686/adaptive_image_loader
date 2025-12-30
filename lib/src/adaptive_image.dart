@@ -40,13 +40,15 @@ class AdaptiveImage extends StatelessWidget {
     double? height,
     BoxFit? fit,
     ImageErrorWidgetBuilder? errorBuilder,
+    bool useCache =
+        false, // 👈 expose the flag (default: false for backward compat)
   }) {
     return AdaptiveImage._(
       key: key,
       url: url,
       isDrive: false,
       isDropbox: false,
-      useCache: false,
+      useCache: useCache, // ✅ now controllable
       width: width,
       height: height,
       fit: fit,
