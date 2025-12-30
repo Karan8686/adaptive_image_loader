@@ -10,10 +10,6 @@ class AdaptiveImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit? fit;
-  final AlignmentGeometry? alignment;
-  final ImageRepeat? repeat;
-  final Color? color;
-  final BlendMode? colorBlendMode;
   final bool gaplessPlayback;
   final bool isAntiAlias;
   final FilterQuality filterQuality;
@@ -36,10 +32,6 @@ class AdaptiveImage extends StatelessWidget {
     this.width,
     this.height,
     this.fit,
-    this.alignment = Alignment.center,
-    this.repeat = ImageRepeat.noRepeat,
-    this.color,
-    this.colorBlendMode,
     this.gaplessPlayback = false,
     this.isAntiAlias = false,
     this.filterQuality = FilterQuality.low,
@@ -141,7 +133,8 @@ class AdaptiveImage extends StatelessWidget {
             cachedPlaceholder ??
             (_, __) => const Center(child: CircularProgressIndicator()),
         errorWidget:
-            cachedErrorWidget ?? (_, __, error) => const Icon(Icons.error),
+            cachedErrorWidget ??
+            (_, error, stackTrace) => const Icon(Icons.error),
       );
     }
 
@@ -150,17 +143,14 @@ class AdaptiveImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-      alignment: alignment ?? Alignment.center,
-      repeat: repeat ?? ImageRepeat.noRepeat,
-      color: color,
-      colorBlendMode: colorBlendMode,
       gaplessPlayback: gaplessPlayback,
       isAntiAlias: isAntiAlias,
       filterQuality: filterQuality,
       excludeFromSemantics: excludeFromSemantics,
       semanticLabel: semanticLabel,
       errorBuilder:
-          imageErrorBuilder ?? (_, __, ___) => const Icon(Icons.error),
+          imageErrorBuilder ??
+          (_, error, stackTrace) => const Icon(Icons.error),
     );
   }
 
