@@ -10,8 +10,8 @@ class AdaptiveImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit? fit;
-  final AlignmentGeometry alignment;
-  final ImageRepeat repeat;
+  final AlignmentGeometry? alignment;
+  final ImageRepeat? repeat;
   final Color? color;
   final BlendMode? colorBlendMode;
   final bool gaplessPlayback;
@@ -141,7 +141,7 @@ class AdaptiveImage extends StatelessWidget {
             cachedPlaceholder ??
             (_, __) => const Center(child: CircularProgressIndicator()),
         errorWidget:
-            cachedErrorWidget ?? (_, __, ___) => const Icon(Icons.error),
+            cachedErrorWidget ?? (_, __, error) => const Icon(Icons.error),
       );
     }
 
@@ -150,8 +150,8 @@ class AdaptiveImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-      alignment: alignment,
-      repeat: repeat,
+      alignment: alignment ?? Alignment.center,
+      repeat: repeat ?? ImageRepeat.noRepeat,
       color: color,
       colorBlendMode: colorBlendMode,
       gaplessPlayback: gaplessPlayback,
