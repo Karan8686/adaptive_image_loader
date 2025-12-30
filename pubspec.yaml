@@ -1,6 +1,6 @@
 name: adaptive_image_loader
 description: "Load normal and Google Drive images with full Image.network customization and optional caching."
-version: 0.0.1
+version: 1.0.0
 homepage: https://github.com/Karan8686/adaptive_image_loader
 repository: https://github.com/Karan8686/adaptive_image_loader
 
